@@ -1,6 +1,6 @@
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
+import java.util.Scanner; 
 
 public class Main {
 	
@@ -17,8 +17,7 @@ public class Main {
 			int ny = b + dy[op][i];
 			
 			if (nx < 0 && (ny >0 || ny < c)) continue;
-			if (nx >= r || ny < 0 || ny >= c) return false;
-			if (forest[nx][ny] > 0) return false;
+			if (nx >= r || ny < 0 || ny >= c || forest[nx][ny] != 0) return false;
 		}
 		return true;
 	}
@@ -42,11 +41,10 @@ public class Main {
 				int ny = y + ddy[i];
 				
 				if (nx >= 0 && nx < r && ny >= 0 && ny < c && !visited[nx][ny] && forest[nx][ny] != 0) {
-				    if (forest[nx][ny] == cnt || cnt == -1 || forest[nx][ny] == -1) {
-				        queue.add(new int[] {nx, ny, forest[nx][ny]});
-				        visited[nx][ny] = true;
-				        maxRow = Math.max(maxRow, nx);
-				    }
+				    if (cnt == 1 && forest[nx][ny] != 2) continue;
+			        queue.add(new int[] {nx, ny, forest[nx][ny]});
+			        visited[nx][ny] = true;
+			        maxRow = Math.max(maxRow, nx);
 				}
 			}
 		}
@@ -59,7 +57,7 @@ public class Main {
 		c = scan.nextInt();
 		forest = new int[r][c];
 		int k = scan.nextInt();
-		int ans = 0, golemCnt = 0;
+		int ans = 0;
 		
 		for (int i = 0; i < k; i++) {
 			int x = -2;
@@ -72,30 +70,25 @@ public class Main {
 				}else if (check(x,y,1)) {
 					x++;
 					y--;
-					exit = (exit-1)%4;
+					exit = (exit-1+4)%4;
 				}else if (check(x,y,2)) {
 					x++;
 					y++;
 					exit = (exit+1)%4;
-				}else {
-					break;
-				}
+				}else break;
 			}
 			
 			if (x <= 0) {
-				golemCnt = 0;
 				forest = new int[r][c];
 			} else {
-				golemCnt++;
-				forest[x][y] = golemCnt;
+				forest[x][y] = 2;
 				for (int j = 0; j < 4; j++) {
-					forest[x + ddx[j]][y + ddy[j]] = golemCnt;
+					forest[x + ddx[j]][y + ddy[j]] = 1;
 				}
 				forest[x + ddx[exit]][y + ddy[exit]] = -1;
 				ans += bfs(x,y);
 			}
  		}
-		
-		System.out.println(ans-1);
+		System.out.println(ans);
 	}
 }
