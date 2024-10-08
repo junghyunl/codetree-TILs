@@ -39,7 +39,7 @@ public class Main {
 			explore();
 			if (!pos) break;
 			
-			pointer = 0; ans = 0;
+			ans = 0;
 			while (true) {
 				int value = getRelic();
 				if (value == 0) break;
