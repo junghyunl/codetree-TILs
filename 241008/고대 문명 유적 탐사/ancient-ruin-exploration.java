@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -56,21 +57,22 @@ public class Main {
 		for (int i = 0; i < 3; i++) {	// y, x 0-2까지
 			for (int j = 0; j < 3; j++) {
 				for (int k = 1; k < 4; k++) {
-					rotate(i, j);
+					rotate(j, i);
 					int value = check();
 					if (maxCount < value || (maxCount == value && k < rotateCnt)) {
 						maxCount = value;
 						rotateCnt = k;
-						location = new Point(j, i);
+						location = new Point(i, j);
 					}
 				}
-				rotate(i, j);
+				rotate(j, i);
 			}
 		}
 		if (rotateCnt == 0) {
 			pos = false;
 			return;
 		}
+		
 		for (int i = 0; i < rotateCnt; i++) {
 			rotate(location.y, location.x);
 		}
