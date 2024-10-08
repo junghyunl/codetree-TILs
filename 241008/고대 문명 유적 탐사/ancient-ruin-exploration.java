@@ -3,7 +3,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -145,7 +147,8 @@ public class Main {
 		q.offer(new Point(x, y));
 
 		visited[y][x] = true;
-		int cnt = 1;
+		List<Point> delete = new ArrayList<>();
+		delete.add(new Point(x, y));
 		
 		while (!q.isEmpty()) {
 			Point cur = q.poll();
@@ -156,26 +159,16 @@ public class Main {
 				if (ny < 0 || ny > 4 || nx < 0 || nx > 4 || visited[ny][nx] || site[y][x] != site[ny][nx]) continue;
 				visited[ny][nx] = true;
 				q.offer(new Point(nx, ny));
-				cnt++;
+				delete.add(new Point(nx, ny));
 			}
 		}
-		if (cnt < 3) return 0;
+		if (delete.size() < 3) return 0;
 		
-		q.offer(new Point(x, y));
-		int relicNum = site[y][x];
-		
-		while (!q.isEmpty()) {
-			Point cur = q.poll();
-			site[cur.y][cur.x] = 0;
-			
-			for (int i = 0; i < 4; i++) {
-				int ny = cur.y + dy[i];
-				int nx = cur.x + dx[i];
-				if (ny < 0 || ny > 4 || nx < 0 || nx > 4 || site[ny][nx] != relicNum) continue;
-				q.offer(new Point(nx, ny));
-			}
+		for (Point p : delete) {
+			site[p.y][p.x] = 0;
 		}
-		return cnt;
+		
+		return delete.size();
 	}
 	
 	static void fillRelic() {						// 유적 채우기
